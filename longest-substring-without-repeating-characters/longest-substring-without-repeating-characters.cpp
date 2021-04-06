@@ -7,22 +7,18 @@ public:
         int left = 0;
         int right = 0;
         int largest = 0;
+        auto ite = seen.begin();
         for(;right<size;right++){
-            if (seen.find(s[right]) == seen.end()){
+            ite = seen.find(s[right]);
+            if (ite == seen.end()){
                 seen.insert(make_pair(s[right],right));
             }else{
-                largest = max(largest,right-left);
-                cout << largest << endl;
-                if (s[right-1] == s[right]){
-                    left = right;
-                    right--;
-                }else{
-                    right = left;
-                    left++;
+                if (ite->second >= left){
+                    largest = max(largest, right-left);
+                    left = ite->second+1;
                     
                 }
-                
-                seen.clear();
+                ite->second = right;
             }
         }
         return max(largest,right-left);
