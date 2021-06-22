@@ -1,5 +1,12 @@
 class Solution {
 public:
+    /* soln idea: 
+    /*       trial 1: attempted to use a left and right ptr to capture a palindrome and move forward.
+    /*       problem: palindrome could be anywhere and its not consistent with the window. Forexample, you cant just proclaim a length 3 string isnt going to be in a palindrome if it isnt. it come be a part of another.
+    /*       soln: find centers! the only thing consistent considering palindromes are the centers! try each center and expand around it. 
+    */
+    
+
     short expandAt(const string& s, const short& l1, const short& l2){
         short left = (l1 == l2)? (l1-1):(l1);
         short right = (l1 == l2)? (l2+1):(l2);
