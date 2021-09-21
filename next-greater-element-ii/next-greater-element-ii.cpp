@@ -8,33 +8,33 @@ public:
         int bottom = 0;
         short size = nums.size();
         vector<int> result(size,0);
-        stack<pair<short,int>> hist{};
-        hist.push(make_pair(0,nums[0]));
+        stack<short> hist{};
+        hist.push(0);
         for(short i = 1;i < size;i++){
-            while(hist.top().second < nums[i]){
-                result[hist.top().first] = nums[i];
+            while(nums[hist.top()] < nums[i]){
+                result[hist.top()] = nums[i];
                 hist.pop();
                 if (hist.empty()){
                     bottom = i;
                     break;
                 }
             }
-            hist.push(make_pair(i,nums[i]));
+            hist.push(i);
         }
         int index = 0;
-        while(hist.top().second != nums[bottom]){
-            while(nums[index]<= hist.top().second){
+        while(nums[hist.top()] != nums[bottom]){
+            while(nums[index]<= nums[hist.top()]){
                 index++;
             }
-            result[hist.top().first] = nums[index];
+            result[hist.top()] = nums[index];
             hist.pop();
-            while(hist.top().second < nums[index]){
-                result[hist.top().first] = nums[index];
+            while(nums[hist.top()] < nums[index]){
+                result[hist.top()] = nums[index];
                 hist.pop();
             }
         }
         while(!hist.empty()){
-            result[hist.top().first] = -1;
+            result[hist.top()] = -1;
             hist.pop();
         }
         return result;
