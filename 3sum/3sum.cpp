@@ -1,81 +1,61 @@
 class Solution {
 public:
-        void swap(vector<int>& arr, int n1, int n2){
-        int tmp = arr[n1];
-        arr[n1] = arr[n2];
-        arr[n2] = tmp;
-    }
-int partition(vector<int>& arr, int pIndex, int begin,int end){
-    if (end == begin) return begin;
-    int i = begin-1,j=end+1,v = arr[pIndex];
-    swap(arr,end,pIndex);
-    while(true){
-        do{
-            if (i == end) return end;
-            i++;
-        }while(arr[i]<= v);
-        do{
-            j--;
-        }while(j >= i && arr[j] >= v );
-        if (j <= i){
-            swap(arr,i,end);
-            return i;
-        }else{
-            swap(arr,i,j);
-        }
-    }
-}
-
-    void quickSort(vector<int>& arr){
-        stack<pair<int,int>> parts{};
-        int size = arr.size();
-        parts.push(make_pair(0,size-1)); //big range
-        int begin = 0, end = 0;
-        int pivot = 0, i = 0;
-        while(!parts.empty()){
-            const pair<int,int> tmp = parts.top();
-            parts.pop();
-            begin = tmp.first;
-            end = tmp.second;
-            while (end > begin){
-                pivot = floor((end-begin)/2) + begin;
-                // cout << "current:" << pivot <<" " <<" " <<  begin << "" <<end<<endl;
-                // for(auto i:arr){
-                //     cout << i << "  ";
-                // }
-                i = partition(arr,pivot,begin,end);
-                // cout << "correct index is:" << i << endl <<"after:";
-                // for(auto i:arr){
-                //     cout << i << "  ";
-                // }
-                // cout << endl;
-                if (i - begin < end - i){
-                    parts.push(make_pair(i+1,end));
-                    end = i-1;
-                }else{
-                    parts.push(make_pair(begin,i-1));
-                    begin = i+1;
-                }
-            }
-        }
-    }
     vector<vector<int>> threeSum(vector<int>& nums) {
-        int size = nums.size();
         vector<vector<int>> result{};
-        quickSort(nums);
-        for(int i = 0; i < size;i++){
-            unordered_set<int> seen{};
-            if (i != 0 && nums[i] == nums[i-1]) continue;
-            for(int j = i+1;j < size; j++){
-                if (seen.count(-nums[i]-nums[j])){
-                    result.push_back({nums[i],nums[j],-nums[i]-nums[j]});
-                    while (j+1 < size && nums[j+1] == nums[j])j++;
-                }else{
-                    seen.insert(nums[j]);
-                }
+        short size = nums.size();
+        sort(nums.begin(),nums.end());
+        for(short i = 0; i <size;i++){
+            if (i > 0 && nums[i] == nums[i-1])continue; //dup n1
+            short j = i+1;
+            short k = size-1;
+            while(j < k){
+                if (nums[j]+nums[k] == -nums[i]){
+                    result.push_back(vector<int>{nums[i],nums[j],nums[k]});
+                    while(j < k && nums[k] == nums[k-1])k--;
+                    while(j < k && nums[j]  == nums[j+1])j++;
+                    k--;j++;
+                } 
+                else if (nums[j]+nums[k] < -nums[i]) j++;
+                else k--;
             }
         }
         return result;
     }
+    void heapSort(vector<int>& nums){
+        heapify(nums);
+        for(short i = nums.size()-1;i >=0;i--){
+            swap(nums[0],nums[i]);
+            fix_down(nums,0,i);
+        }
+    }
+    short parent(short i){
+        return (i-1)/2;
+    }
+    short leftChild(short i){
+        return 2*i+1;
+    }
+    short rightChild(short i){
+        return 2*i+2;
+    }
+    void fix_down(vector<int>& nums, short i,short size){
+        while(leftChild(i) < size){//while i is not last layer
+            if (rightChild(i) < size && nums[rightChild(i)] > nums[leftChild(i)]){
+                //if yes right child, and right > left
+                if (nums[i] < nums[rightChild(i)]){
+                    swap(nums[i],nums[rightChild(i)]);
+                    i = rightChild(i);
+                }else return;
+            }
+            else if (nums[i] < nums[leftChild(i)]){
+                swap(nums[i],nums[leftChild(i)]);
+                i = leftChild(i);
+            }else return;
+        }
+    }
+    void heapify(vector<int>& nums){
+        short size = nums.size();
+        for(short i = parent(size-1);i >=0;i--){
+            fix_down(nums,i,size);
+        }
+    }
 };
-
