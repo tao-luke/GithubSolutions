@@ -16,43 +16,42 @@ public:
 
 class Solution {
 public:
-    Node* copyRandomList(Node* head) {
-        if (head ==  nullptr) return nullptr;
-        unordered_map<Node*,Node*> vtable{};
-        Node* newHead = new Node(head->val);
-        vtable.insert(make_pair(head,newHead));
-        if (head->random != nullptr){
-            if (head->random == head){
-                newHead->random = newHead;
-            }else{
-                newHead->random = new Node(head->random->val);
-                vtable.insert(make_pair(head->random,newHead->random));
-            }
-
-        }
-        head = head->next;
-        Node* end = newHead;
-        
+    Node* firstPass(Node* head){
+        Node* front = head;
         while(head != nullptr){
-            auto ite = vtable.find(head);
-            if (ite != vtable.end()) end->next = ite->second;
-            else{
-                end->next = new Node(head->val);
-                vtable.insert(make_pair(head,end->next));
+            Node* tmp = new Node(head->val);
+            tmp->next = head->next;
+            head->next = tmp;
+            head = head->next->next;
+        }
+        return front;
+    }
+    Node* secondPass(Node* head){
+        Node* front = head;
+        while(head != nullptr){
+            Node* tmp = head->next;
+            if (head->random){
+                tmp->random = head->random->next;
             }
-
-            if (head->random != nullptr){
-                ite = vtable.find(head->random);
-                if (ite != vtable.end()){
-                    end->next->random = ite->second;
-                }else{
-                    end->next->random = new Node(head->random->val);
-                    vtable.insert(make_pair(head->random,end->next->random));
-                }
+            head = head->next->next;
+        }
+        head = front;
+        front = head->next;
+        while(head != nullptr){
+            Node* tmp = head->next;
+            if (tmp->next){
+                head->next = tmp->next;
+                tmp->next =  head->next->next;
+            }else{
+                head->next = nullptr;
             }
-            end = end->next;
             head = head->next;
         }
-        return newHead;
+        return front;
+    }
+    Node* copyRandomList(Node* head) {
+        if (!head )return head;
+        head = firstPass(head);
+        return secondPass(head);
     }
 };
