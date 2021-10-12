@@ -1,37 +1,35 @@
 class Solution {
 public:
-    bool a_less_b(const vector<int>& nums1, int c1, vector<int>& nums2,int c2){
-        if (c1 >= nums1.size()) return false;
-        if (c2 >= nums2.size()) return true;
-        return nums1[c1] < nums2[c2];
-    }
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        int target1 = max(ceil((nums1.size() + nums2.size()) /(double) 2 )-1,0.0);
-        int target2 = (nums1.size() + nums2.size()) / 2;
-        int ans = 0;
-        int counter1 = 0;
-        int counter2 = 0;
+        //treat the 2 arrs as one
+        int result = 0;
+        
+        unsigned short size1 = nums1.size();
+        unsigned short size2 = nums2.size();
+        
+        unsigned short targetI = (size1+size2-1)/2;
+        unsigned short currentI = 0;
+        
+        auto ite1 = nums1.begin();
+        auto ite2 = nums2.begin();
+        
         while(true){
-            if (a_less_b(nums1,counter1,nums2,counter2)){
-                if (counter1 + counter2 == target1){
-                    ans = nums1[counter1];
-                }
-                if (counter1 + counter2 == target2){
-                    ans += nums1[counter1];
-                    break;
-                } 
-                counter1++;
+            auto tmp = ite1;
+            if (ite1 == nums1.end() or (ite2 != nums2.end() and *ite2 < *ite1)){
+                tmp = ite2;
+                ite2++;
             }else{
-                if (counter1 + counter2 == target1){
-                    ans = nums2[counter2];
-                }
-                if (counter1 + counter2 == target2){
-                    ans += nums2[counter2];
-                    break;
-                } 
-                counter2++;
+                ite1++;
             }
+            // tmp is the current want, and ite1 and ite2 are moved on to NEXT
+            if (currentI == targetI){
+                if ((size1+size2)%2 != 0) return *tmp;
+                
+                // get next good and return avg
+                return (ite2 == nums2.end() or (ite1 != nums1.end() and *ite1 < *ite2)) ? (*tmp+*ite1)/(double)2 : (*tmp+ *ite2)/(double)2;
+            }
+            currentI++;
+            
         }
-        return ans/(double) 2;
     }
 };
