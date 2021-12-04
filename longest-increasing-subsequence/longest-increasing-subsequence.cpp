@@ -12,7 +12,7 @@ public:
                 left = mid+1;
             }
         }
-        if (left-1 >= 0 && dp[left-1] == n) return;
+        if (left-1 >= 0 && dp[left-1] == n) return; //we found the least index where elem is > n, but we cant extend here IF the previous index is equal to this number. This is because we ONLY want strict increase set.
         dp[left] = n;
     }
     int lengthOfLIS(vector<int>& nums) {
