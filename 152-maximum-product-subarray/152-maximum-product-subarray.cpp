@@ -4,7 +4,7 @@ public:
         int large = nums.front();
         int small = nums.front();
         int result = large;
-        for(int i = 1; i < nums.size();i++){
+        for(short i = 1; i < nums.size();i++){
             int small_copy = small;
             
             small = min(min(nums[i], small * nums[i]),large * nums[i]);
