@@ -5,11 +5,10 @@ public:
         int small = nums.front();
         int result = large;
         for(int i = 1; i < nums.size();i++){
-            int small_take_new = small * nums[i];
-            int large_take_new = large * nums[i];
+            int small_copy = small;
             
-            small = min(min(nums[i], small_take_new),large_take_new);
-            large = max(max(nums[i], large_take_new),small_take_new);
+            small = min(min(nums[i], small * nums[i]),large * nums[i]);
+            large = max(max(nums[i], large * nums[i]),small_copy * nums[i]);
             
             result = max(large,result);
         }
