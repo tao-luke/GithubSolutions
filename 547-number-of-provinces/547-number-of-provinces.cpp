@@ -1,5 +1,7 @@
 class Solution {
 public:
+    // union find impl. https://www.youtube.com/watch?v=ayW5B2W9hfo
+    
     int findCircleNum(vector<vector<int>>& isConnected) {
         int n = isConnected.size();
         vector<int> parent(n,-1);
