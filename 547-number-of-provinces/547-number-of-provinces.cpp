@@ -5,7 +5,7 @@ public:
         vector<int> parent(n,-1);
         int ans = n;
         for(int i = 0; i < n;i++){
-            for(int j = 0; j < n;j++){
+            for(int j = i+1; j < n;j++){
                 if (isConnected[i][j] != 1) continue;
                 int l1 = find(parent,i);
                 int l2 = find(parent,j);
