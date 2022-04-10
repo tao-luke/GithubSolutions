@@ -1,6 +1,9 @@
 class Solution {
 public:
     vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+        // push in the strictly less thans,
+        // merge the overlaps
+        // push in the strictly greater thans.
         int index = 0;
         vector<vector<int>> result{};
         while(index < intervals.size() && intervals[index][1] < newInterval[0]){
