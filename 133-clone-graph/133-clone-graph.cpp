@@ -22,21 +22,27 @@ public:
 class Solution {
 public:
     Node* cloneGraph(Node* node) {
-        if (node == NULL) return node;
+        if (node == NULL) return NULL;
+        queue<Node*> bfs_q{};
         unordered_map<Node*, Node*> mapping{};
-        return helper(node,mapping);
-    }
-    Node* helper(Node* node, unordered_map<Node*,Node*>& mapping){
-        Node* cpy = new Node(node->val);
-        mapping.insert(make_pair(node,cpy));
-        for(int i = 0; i < node->neighbors.size();i++){
-            auto ite = mapping.find(node->neighbors[i]);
-            if (ite != mapping.end()){
-                cpy->neighbors.push_back(ite->second);
-            }else{
-                cpy->neighbors.push_back(helper(node->neighbors[i],mapping));
+        bfs_q.push(node);
+        Node* result = new Node(node->val);
+        mapping.insert(make_pair(node, result));
+        while(!bfs_q.empty()){
+            Node* current = bfs_q.front();
+            bfs_q.pop();
+            for(int i = 0; i < current->neighbors.size();i++){
+                auto ite = mapping.find(current->neighbors[i]);
+                if (ite == mapping.end()){
+                    Node* cpy = new Node(current->neighbors[i]->val);
+                    mapping.insert(make_pair(current->neighbors[i],cpy));
+                    mapping[current]->neighbors.push_back(cpy);
+                    bfs_q.push(current->neighbors[i]);
+                }else{
+                    mapping[current]->neighbors.push_back(ite->second);
+                }
             }
         }
-        return cpy;
+        return result;
     }
 };
