@@ -21,6 +21,7 @@ public:
 
 class Solution {
 public:
+    //doable with bfs and dfs.
     Node* cloneGraph(Node* node) {
         if (node == NULL) return NULL;
         queue<Node*> bfs_q{};
