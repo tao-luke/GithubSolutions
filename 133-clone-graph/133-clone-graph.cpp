@@ -21,18 +21,22 @@ public:
 
 class Solution {
 public:
-    Node* visit_dup(Node* node, unordered_map<Node*,Node*>& mapping){
-        if (node == NULL) return NULL;
-        Node* new_node = new Node(node->val);
-        mapping.insert(make_pair(node,new_node));
-        for(Node* n: node->neighbors){
-            if (mapping.count(n) != 0) new_node->neighbors.push_back(mapping[n]);
-            else new_node->neighbors.push_back(visit_dup(n,mapping));
-        }
-        return new_node;
-    }
     Node* cloneGraph(Node* node) {
+        if (node == NULL) return node;
         unordered_map<Node*, Node*> mapping{};
-        return visit_dup(node, mapping);
+        return helper(node,mapping);
+    }
+    Node* helper(Node* node, unordered_map<Node*,Node*>& mapping){
+        Node* cpy = new Node(node->val);
+        mapping.insert(make_pair(node,cpy));
+        for(int i = 0; i < node->neighbors.size();i++){
+            auto ite = mapping.find(node->neighbors[i]);
+            if (ite != mapping.end()){
+                cpy->neighbors.push_back(ite->second);
+            }else{
+                cpy->neighbors.push_back(helper(node->neighbors[i],mapping));
+            }
+        }
+        return cpy;
     }
 };
