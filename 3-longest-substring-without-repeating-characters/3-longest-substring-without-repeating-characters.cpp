@@ -1,20 +1,26 @@
 class Solution {
 public:
-    int helper(const string& s, int l){
-        if (l >= s.size()) return 0;
-        int result = 0;
-        unordered_map<char,int> seen{};
-        for(int i = l; i < s.size();i++){
-            if (seen.count(s[i]) != 0){
-                return max(result,helper(s,(seen.find(s[i])->second)+1));
-            }else{
-                seen.insert(make_pair(s[i],i));
-                result++;
-            }
-        }
-        return result;
-    }
     int lengthOfLongestSubstring(string s) {
-        return helper(s,0);
+        int l = 0; 
+        int r = 0;
+        int ans = 0;
+        int local = 0;
+        unordered_map<char, int> hist{}; //char to index mapping
+        while(r < s.size()){
+            char c = s[r];
+            if (hist.find(c) != hist.end()){
+                int tmp = hist[c];
+                while(l <= tmp){
+                    hist.erase(s[l]);
+                    l++;
+                    local--;
+                }
+            }
+            hist.insert(make_pair(c,r));
+            local++;
+            ans = max(ans, local);
+            r++;
+        }
+        return ans;
     }
 };
