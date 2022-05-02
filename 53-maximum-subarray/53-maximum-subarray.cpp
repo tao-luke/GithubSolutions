@@ -1,12 +1,13 @@
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
-        long best = INT_MIN;
-        long localMax = best;
+        long ans = LONG_MIN;
+        long local = 0;
         for(const auto& n: nums){
-            localMax = max(localMax+n, (long)n);
-            best = max(localMax, best);
+            local+=n;
+            ans = max(ans,local);
+            local = max((long)0,local);
         }
-        return best;
+        return ans;
     }
 };
