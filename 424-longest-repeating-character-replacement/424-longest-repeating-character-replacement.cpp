@@ -1,27 +1,27 @@
 class Solution {
 public:
     int characterReplacement(string s, int k) {
+        unordered_map<char,int> seen{};
         int l = 0;
         int r = 0;
         int ans = 0;
-        int size = 0;
-        unordered_map<char,int> seen{}; //char to count mapping
-        int dom_count = 0;
-        while (r < s.size()){
+        int local_size = 0;
+        char freq = 1;
+        while(r < s.size()){
             char c = s[r];
             seen[c]++;
-            dom_count = max(dom_count, seen[c]);
-            size++;
-            while(size - dom_count > k){
+            local_size++;
+            if (freq == 1 or seen[c] > seen[freq]) freq = c;
+
+            while (local_size - seen[freq] > k){
                 seen[s[l]]--;
-                size--;
                 l++;
+                local_size--;
+                for(const auto& p: seen){
+                    if (p.second > seen[freq]) freq = p.first;
+                }
             }
-            ans = max(ans, size);
-            dom_count = 0;
-            for(const auto& p: seen){
-                dom_count = max(dom_count, p.second);
-            }
+            ans = max(ans,local_size);
             r++;
         }
         return ans;
