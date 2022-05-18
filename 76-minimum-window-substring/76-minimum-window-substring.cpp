@@ -1,38 +1,38 @@
 class Solution {
 public:
     string minWindow(string s, string t) {
-        int l = 0;
-        int r = 0;
-        unordered_map<char, int> dict{};
+        unordered_map<char,int> dict{};
         for(const auto& c: t){
             dict[c]++;
         }
-        string result;
-        int rel_size = 0;
+        int l = 0;
+        int r = 0;
+        int ans_l = -1;
+        int size = INT_MAX;
+        int need = t.size();
         while(r < s.size()){
             char c = s[r];
-            if (dict.count(c) != 0){
-                if (dict[c] > 0){
-                    rel_size++;
-                }
-                dict[c]--;
+            auto ite = dict.find(c);
+            if (ite != dict.end()){
+                if (ite->second >0)need--;
+                ite->second--;
             }
-            while(rel_size == t.size()){
-                if (result.size() == 0 || result.size() > r - l+ 1){
-                    result = s.substr(l,r-l+1);
+            while(need <= 0 && l <= r){
+                if (r - l + 1 < size){
+                    //cout << l << "  " << r << endl;
+                    ans_l = l;
+                    size = r - l + 1;
                 }
-                c = s[l];
-                if (dict.count(c) != 0){
-                    if (dict[c] == 0){
-                        rel_size--;
-                    }
-                    dict[c]++;
+                auto ite = dict.find(s[l]);
+                if (ite != dict.end()){
+                    if (ite->second >= 0) need++;
+                    ite->second++;
                 }
                 l++;
             }
-            r++;
-            // cout << l << "  " << r <<"   str:" << result << " rel size: " << rel_size << endl;
+             r++;
         }
-        return result;
+        if (ans_l == -1) return "";
+        return s.substr(ans_l,size);
     }
 };
