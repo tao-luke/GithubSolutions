@@ -1,32 +1,16 @@
 class Solution {
 public:
-    int find_index(const vector<int>& seen, int n){
-        int l = 0;
-        int r = seen.size()-1;
-        while(l < r){
-            int med = l+(r-l)/2;
-            if (seen[med] >= n){
-                r = med;
-            }else{
-                l = med+1;
-            }
-        }
-        if (seen[l] != n){
-            return l;
-        }
-        return -1;
-    }
     int lengthOfLIS(vector<int>& nums) {
-        vector<int> seen{};
-        for(const auto&n: nums){
-            if (seen.empty() || n > seen.back()){
-                seen.push_back(n);
-            }else{
-                int index = find_index(seen,n);
-                if (index != -1) seen[index] = n;
+        vector<int> dp{};
+        for(const auto& n: nums){
+            if (dp.empty() || n > dp.back()){
+                dp.push_back(n);
+                continue;
             }
-            cout << endl;
+            int index = lower_bound(dp.begin(),dp.end(),n) - dp.begin();
+            dp[index] = n;
         }
-        return seen.size();
+        return dp.size();
     }
+
 };
