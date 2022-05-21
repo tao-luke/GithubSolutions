@@ -9,6 +9,7 @@
 class Solution {
 public:
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        // l1 + inter + l2 , the other travels l2 + inter + l1
         ListNode* p1 = headA; ListNode* p2 = headB;
         int counter = 2;
         while(p1 != nullptr && p2 != nullptr && p1 != p2){
