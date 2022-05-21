@@ -10,6 +10,7 @@
  */
 class Solution {
 public:
+    // I forgot O(1) includes using the mem given.
     ListNode* oddEvenList(ListNode* head) {
         if (head == nullptr) return head;
         ListNode* odd = head;
