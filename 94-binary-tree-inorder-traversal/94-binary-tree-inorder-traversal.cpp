@@ -11,19 +11,22 @@
  */
 class Solution {
 public:
-    vector<int> inorderTraversal(TreeNode* root) {
+    vector<int> inorderTraversal(TreeNode* node) {
+        //solve the problem by consider diagnal layers to the left. do the left most, and unwind from there.
         vector<int> result{};
-        stack<TreeNode*> dp{};
-        TreeNode* current = root;
-        while(current != NULL || !dp.empty()){
-            while(current != NULL){
-                dp.push(current);
-                current = current->left;
+        stack<TreeNode*> todo{};
+        while(node != nullptr || !todo.empty()){
+            // for each node, we first add all its left parts in
+            while(node != nullptr){
+                todo.push(node);
+                node = node->left;
             }
-            current = dp.top();
-            dp.pop();
-            result.push_back(current->val);
-            current = current->right;
+            //at the very left part
+            node = todo.top(); todo.pop();
+            result.push_back(node->val);
+            node = node->right;
+            // move node to the right side, which is where we need to go next
+            //since order is left, me, then right. for left most, its just me and right.
         }
         return result;
     }
