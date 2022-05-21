@@ -11,25 +11,20 @@
  */
 class Solution {
 public:
-    TreeNode* helper(const vector<int>& preorder, const vector<int>& inorder, int&& a, int&& b,int&& startFrom){
-        if (a == b){
-            return nullptr;
-        }
-        TreeNode* root = new TreeNode(preorder[a]);
-        if (b - a == 1){
-            return root;
-        }else{
-            int i = startFrom;
-            while(inorder[i] != preorder[a]){
-                i++;
-            }
-            i= i - startFrom;
-            root->left = helper(preorder,inorder,a+1,a+1+i,move(startFrom));
-            root->right = helper(preorder,inorder,a+1+i,move(b),startFrom+i+1);
-        }
-        return root;
-    }
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        return helper(preorder,inorder,0,preorder.size(),0);
+        TreeNode* result = helper(preorder, 0, preorder.size(), inorder, 0, inorder.size());
+        return result;
+    }
+    TreeNode* helper(const vector<int>& preorder, int a, int b, vector<int>& inorder, int c, int d){
+        cout << a <<" " << b << " " << c <<" " << d << endl;
+        if (a == b || c == d) return nullptr;
+        TreeNode* node = new TreeNode(preorder[a]);
+        int counter = 0;
+        while(inorder[c+counter] != node->val){ //find the value in inorder
+            counter++;
+        }
+        node->left = helper(preorder, a+1, a+counter+1, inorder, c, c+counter);
+        node->right = helper(preorder, a+counter+1, b, inorder, c+counter+1, d);
+        return node;
     }
 };
