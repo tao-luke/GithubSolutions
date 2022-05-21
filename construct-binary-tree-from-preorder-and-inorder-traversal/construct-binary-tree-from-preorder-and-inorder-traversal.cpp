@@ -16,7 +16,6 @@ public:
         return result;
     }
     TreeNode* helper(const vector<int>& preorder, int a, int b, vector<int>& inorder, int c, int d){
-        cout << a <<" " << b << " " << c <<" " << d << endl;
         if (a == b || c == d) return nullptr;
         TreeNode* node = new TreeNode(preorder[a]);
         int counter = 0;
