@@ -23,7 +23,6 @@ public:
       int index_1 = init_left(nums);
       int index_2 = index_1 + 1;
       while(index_1 != -1 || index_2 != nums.size()){
-        cout << index_1 << " " << index_2 << endl;
         int next_index = get_next_index_and_inc(nums,index_1,index_2);
         res.push_back(nums[next_index]*nums[next_index]);
       }
